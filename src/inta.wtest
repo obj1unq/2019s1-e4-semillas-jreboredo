@@ -1,0 +1,44 @@
+import semillas.*
+import parcelas.*
+import inta.*
+
+describe "Testeo del INTA" {
+
+	var menta = new Menta(anoDeObtencion = 2019, altura = 1)
+	var menta2 = new Menta(anoDeObtencion = 2019, altura = 0.3)
+	var soja = new Soja(anoDeObtencion = 2009, altura = 0.6)
+	var soja2 = new Soja(anoDeObtencion = 2006, altura = 2)
+	var soja3 = new Soja(anoDeObtencion = 2010, altura = 2)
+	var quinoa = new Quinoa(anoDeObtencion = 2010, hsDeSolToleradas = 12, altura = 0)
+	var quinoa2 = new Quinoa(anoDeObtencion = 2001, hsDeSolToleradas = 9, altura = 0)
+	var sojaTrans = new SojaTrans(anoDeObtencion = 2009, altura = 0.6)
+	var sojaTrans2 = new SojaTrans(anoDeObtencion = 2006, altura = 2)
+	var sojaTrans3 = new SojaTrans(anoDeObtencion = 2010, altura = 2)
+	var hierbabuena = new Hierbabuena(anoDeObtencion = 2019, altura = 1)
+	var hierbabuena2 = new Hierbabuena(anoDeObtencion = 2019, altura = 0.3)
+	var parcelaInd = new ParcelaIndustrial(ancho = 20, largo = 1, hsDeSolRecibidas = 8, plantas = [ quinoa, sojaTrans2 ])
+	var parcela2 = new Parcela(ancho = 4, largo = 1, hsDeSolRecibidas = 7, plantas = [])
+	var parcela3 = new Parcela(ancho = 20, largo = 1, hsDeSolRecibidas = 8, plantas = [ soja, menta ])
+	var parcela4 = new ParcelaIndustrial(ancho = 2.5, largo = 2, hsDeSolRecibidas = 8, plantas = [soja, soja2, soja3, menta])
+	var parcelaInd2 = new ParcelaIndustrial(ancho = 20, largo = 1, hsDeSolRecibidas = 9, plantas = [ quinoa, sojaTrans2, soja, soja3 ])
+	
+
+	/*fixture {
+	 }*/
+	test "el inta tiene promedio = 2 con una sola parcela con dos plantas" {
+		inta.agregarParcela(parcelaInd)
+		assert.equals(2, inta.promedioDePlantas())
+	}
+	test "el inta tiene promedio = 2 con dos parcelas y una sola parcela con dos plantas" {
+		inta.agregarParcela(parcelaInd)
+		inta.agregarParcela(parcela2)
+		assert.equals(1, inta.promedioDePlantas())
+	}
+	test "el inta tiene como planta mas sustentable a parcelaInd2" {
+		inta.agregarParcela(parcelaInd2)
+		inta.agregarParcela(parcela4)
+		assert.equals(parcelaInd2, inta.masAutosustentable())
+	}
+	
+}
+

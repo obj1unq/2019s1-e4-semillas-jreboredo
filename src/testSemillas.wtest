@@ -1,0 +1,118 @@
+import semillas.*
+import parcelas.*
+
+describe "Testeo de Plantas y Semillas" {
+	var menta = new Menta(anoDeObtencion = 2019, altura = 1)
+	var menta2 = new Menta(anoDeObtencion = 2019, altura = 0.3)
+	var soja = new Soja(anoDeObtencion = 2009, altura = 0.6)
+	var soja2 = new Soja(anoDeObtencion = 2006, altura = 2)
+	var soja3 = new Soja(anoDeObtencion = 2010, altura = 2)
+	var quinoa = new Quinoa (anoDeObtencion = 2010, hsDeSolToleradas = 12, altura = 0)
+	var quinoa2 = new Quinoa (anoDeObtencion = 2001, hsDeSolToleradas = 9, altura = 0)
+	var sojaTrans = new SojaTrans(anoDeObtencion = 2009, altura = 0.6)
+	var sojaTrans2 = new SojaTrans(anoDeObtencion = 2006, altura = 2)
+	var sojaTrans3 = new SojaTrans(anoDeObtencion = 2010, altura = 2)
+	var hierbabuena = new Hierbabuena(anoDeObtencion = 2019, altura = 1)
+	var hierbabuena2 = new Hierbabuena(anoDeObtencion = 2019, altura = 0.3)
+	var parcela = new Parcela (ancho = 20, largo = 1, hsDeSolRecibidas = 8, plantas= [soja, sojaTrans2])
+	var parcela2 = new Parcela (ancho = 4, largo = 1, hsDeSolRecibidas = 7, plantas= [])
+	var parcela3 = new Parcela (ancho = 20, largo = 1, hsDeSolRecibidas = 8, plantas= [soja, menta])
+	var parcela4 = new Parcela (ancho = 2.5, largo = 2, hsDeSolRecibidas = 8, plantas= [soja2])
+	/*fixture {
+		}*/
+
+	test "una menta de 1 metro, debería dar semillas y ocupar un espacio de 3 metros cuadrados." {
+		assert.that(menta.daNuevasSemillas())
+		assert.equals(3, menta.espacioOcupado())
+	}
+	test "una menta de solo 0.3 metros, no debería dar semillas y ocuparía 0.9 m2 de espacio." {
+		assert.notThat(menta2.daNuevasSemillas())
+		assert.equals(0.9, menta2.espacioOcupado())
+	}
+	test "Ambas mentas tiene 6 hs de sol" {
+		assert.equals(6, menta.hsDeSolToleradas())
+		assert.equals(6, menta2.hsDeSolToleradas())
+	}
+	test "una soja de 0.6 metros y de semilla de 2009, la planta tendría una tolerancia al sol de 7 horas, no daría semillas y ocuparía 0.3 m2" {
+		assert.equals(7, soja.hsDeSolToleradas())
+		assert.notThat(soja.daNuevasSemillas())
+		assert.equals(0.3, soja.espacioOcupado())
+	}
+	test "una soja de 2 metros y de semilla de 2006, la planta tendría una tolerancia al sol de 9 horas, no daría semillas y ocuparía 1 m2" {
+		assert.equals(9, soja2.hsDeSolToleradas())
+		assert.notThat(soja2.daNuevasSemillas())
+		assert.equals(1, soja2.espacioOcupado())
+	}
+	test "una soja de 2 metros y de semilla de 2018, la planta tendría una tolerancia al sol de 9 horas, daría semillas y ocuparía 1 m2" {
+		assert.equals(9, soja3.hsDeSolToleradas())
+		assert.that(soja3.daNuevasSemillas())
+		assert.equals(1, soja3.espacioOcupado())
+	}
+	test "si tenemos una quinoa que tolera 12 horas de sol y su semilla de origen es de 2010, se trata de una planta que da semillas." {
+		//assert.equals(12, quinoa.hsDeSolToleradas())
+		assert.notThat(quinoa.daNuevasSemillas())
+		assert.equals(0.5, quinoa.espacioOcupado())
+	}
+	test "si tenemos una planta que tolere 9 horas de sol pero cuya semilla de origen es de 2001, también da semillas." {
+		//assert.equals(9, quinoa2.hsDeSolToleradas())
+		assert.that(quinoa2.daNuevasSemillas())
+		assert.equals(0.5, quinoa2.espacioOcupado())
+	}
+	test "una soja trans de 0.6 metros y de semilla de 2009, la planta tendría una tolerancia al sol de 7 horas, no daría semillas y ocuparía 0.3 m2" {
+		assert.equals(7, sojaTrans.hsDeSolToleradas())
+		assert.notThat(sojaTrans.daNuevasSemillas())
+		assert.equals(0.3, sojaTrans.espacioOcupado())
+	}
+	test "una soja trans de 2 metros y de semilla de 2006, la planta tendría una tolerancia al sol de 9 horas, no daría semillas y ocuparía 1 m2" {
+		assert.equals(9, sojaTrans2.hsDeSolToleradas())
+		assert.notThat(sojaTrans2.daNuevasSemillas())
+		assert.equals(1, sojaTrans2.espacioOcupado())
+	}
+	test "una soja trans de 2 metros y de semilla de 2018, la planta tendría una tolerancia al sol de 9 horas,  no daría semillas y ocuparía 1 m2" {
+		assert.equals(9, sojaTrans3.hsDeSolToleradas())
+		assert.notThat(sojaTrans3.daNuevasSemillas())
+		assert.equals(1, sojaTrans3.espacioOcupado())
+	}
+	
+	test "una hierbabuena de 1 metro, debería dar semillas y ocupar un espacio de 3 metros cuadrados." {
+		assert.that(hierbabuena.daNuevasSemillas())
+		assert.equals(6, hierbabuena.espacioOcupado())
+	}
+	test "una hierbabuena de solo 0.3 metros, no debería dar semillas y ocuparía 0.9 m2 de espacio." {
+		assert.notThat(hierbabuena2.daNuevasSemillas())
+		assert.equals(1.8, hierbabuena2.espacioOcupado())
+	}
+	test "Ambas hierbabuena tiene 6 hs de sol" {
+		assert.equals(6, hierbabuena.hsDeSolToleradas())
+		assert.equals(6, hierbabuena2.hsDeSolToleradas())
+	}
+	test "A la menta 1 y la hierba buena les resulta ideal la parcela" {
+		assert.that(menta.parcelaIdeal(parcela))
+		assert.that(menta.parcelaIdeal(parcela))
+	}
+	test "A la menta 1 y la hierba buena no les resulta ideal la parcela 2" {
+		assert.notThat(menta.parcelaIdeal(parcela2))
+		assert.notThat(hierbabuena.parcelaIdeal(parcela2))
+	}
+	test "a la quinoa no le resuelta ideal la parcela4" {
+		assert.notThat(quinoa.parcelaIdeal(parcela4))
+	}
+	test "a la quinoa  le resuelta idea la parcela3" {
+		assert.that(quinoa.parcelaIdeal(parcela3))
+	}
+	test "a la soja le cae bien la parcela 2" {
+		assert.that(soja.parcelaIdeal(parcela2))
+	}
+	test "a la soja no le cae bien la parcela " {
+		assert.notThat(soja.parcelaIdeal(parcela))
+	}
+	test "a la sojatrans le cae bien la parcela 4" {
+		assert.that(sojaTrans.parcelaIdeal(parcela4))
+	}
+	test "a la sojatrabs no le cae bien la parcela " {
+		assert.notThat(sojaTrans.parcelaIdeal(parcela))
+	}
+	
+}
+
+

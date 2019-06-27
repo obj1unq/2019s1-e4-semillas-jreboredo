@@ -1,0 +1,64 @@
+import parcelas.*
+import semillas.*
+
+describe "Testeo de Parcelas" {
+	var menta = new Menta(anoDeObtencion = 2019, altura = 1)
+	var menta2 = new Menta(anoDeObtencion = 2019, altura = 0.3)
+	var soja = new Soja(anoDeObtencion = 2009, altura = 0.6)
+	var soja2 = new Soja(anoDeObtencion = 2006, altura = 2)
+	var soja3 = new Soja(anoDeObtencion = 2010, altura = 2)
+	var soja4 = new Soja(anoDeObtencion = 2016, altura = 2)
+	var quinoa = new Quinoa (anoDeObtencion = 2010, hsDeSolToleradas = 12, altura = 0)
+	var quinoa2 = new Quinoa (anoDeObtencion = 2001, hsDeSolToleradas = 9, altura = 0)
+	var sojaTrans = new SojaTrans(anoDeObtencion = 2009, altura = 0.6)
+	var sojaTrans2 = new SojaTrans(anoDeObtencion = 2006, altura = 2)
+	var sojaTrans3 = new SojaTrans(anoDeObtencion = 2010, altura = 2)
+	var hierbabuena = new Hierbabuena(anoDeObtencion = 2019, altura = 1)
+	var hierbabuena2 = new Hierbabuena(anoDeObtencion = 2019, altura = 0.3)
+	var parcela = new Parcela (ancho = 20, largo = 1, hsDeSolRecibidas = 8, plantas= [])
+	var parcelaf = new Parcela (ancho = 20, largo = 1, hsDeSolRecibidas = 8, plantas= [soja,menta,hierbabuena,sojaTrans])
+	var parcelaInd = new ParcelaIndustrial (ancho = 20, largo = 1, hsDeSolRecibidas = 8, plantas= [soja, sojaTrans2])
+	var parcelaIndVac = new ParcelaIndustrial (ancho = 20, largo = 1, hsDeSolRecibidas = 8, plantas= [soja])
+	var parcelaEco = new ParcelaEcologica (ancho = 20, largo = 1, hsDeSolRecibidas = 8, plantas= [soja, sojaTrans2])
+	var parcelaEcoVac = new ParcelaEcologica (ancho = 20, largo = 1, hsDeSolRecibidas = 8, plantas= [soja])
+
+	/*fixture {
+	
+	}*/
+
+	test "Una parcela de 20 mts. de ancho por 1 mt. de largo que recibe 8 horas de sol por día, tiene una superficie de 20 m2 y la cantidad máxima de plantas que tolera es de 4." {
+		assert.equals(4, parcela.cantidadMaximaTolerada())
+		assert.equals(20, parcela.superficie())
+	}
+	test "Si a esa parcela le plantamos 4 plantas de soja de más de 1 metro (que toleran 9 horas de sol), no tendría complicaciones. Si intentaramos agregar una quinta planta, se superaría la cantidad máxima y nos arrojaría un error." {
+		assert.equals(4, parcelaf.cantidadMaximaTolerada())
+		assert.equals(20, parcelaf.superficie())
+		assert.equals(4, parcelaf.plantas().size())
+		assert.equals([soja,menta,hierbabuena,sojaTrans], parcelaf.plantas())
+		assert.throwsException({parcelaf.plantarUnaPlanta(soja4)})
+	}
+	test "una parcela indstrial sin plantas no le va bien a la soja de altura 2" {
+		assert.notThat(parcelaIndVac.leVaBien(soja4))
+	}
+	test "una parcela indstrial con 2 plantas no le va bien a la quinoa de altura 2" {
+		assert.notThat(parcelaInd.leVaBien(quinoa))
+	}
+	test "una parcela indstrial con 1 plantas  le va bien a la quinoa de altura 0 y resis 12" {
+		assert.notThat(parcelaIndVac.leVaBien(quinoa))
+	}
+	test "una parcela indstrial con 1 plantas  no le va bien a la quinoa de resistencia 9" {
+		assert.notThat(parcelaIndVac.leVaBien(quinoa2))
+	}
+	test "una parcela Ecologica sin plantas no le va bien a la soja de altura 2" {
+		assert.notThat(parcelaEcoVac.leVaBien(soja4))
+	}
+	test "una parcela Ecologica con 2 plantas no le va bien a la quinoa de altura 2" {
+		assert.notThat(parcelaEco.leVaBien(quinoa))
+	}
+	test "una parcela Ecologica con 1 plantas  le va bien a la quinoa de altura 0 y resis 12" {
+		assert.that(parcelaEcoVac.leVaBien(quinoa))
+	}
+	test "una parcela Ecologica con 1 plantas  no le va bien a la quinoa de resistencia 9" {
+		assert.that(parcelaEcoVac.leVaBien(quinoa2))
+	}
+}
